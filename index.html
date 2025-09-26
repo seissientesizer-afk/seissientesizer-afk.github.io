@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Client</title>
+</head>
+<body>
+    <h1>WebSocket Client</h1>
+    <div id="messages"></div>
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const socket = new WebSocket('ws://localhost:8080');
+
+        // Event listener for when the connection is opened
+        socket.onopen = function(e) {
+            console.log('[open] Connection established');
+            messagesDiv.innerHTML += '<p>Connection established</p>';
+            socket.send('Hello Server!');
+        };
+
+        // Event listener for receiving messages from the server
+        socket.onmessage = function(event) {
+            console.log(`[message] Data received from server: ${event.data}`);
+            messagesDiv.innerHTML += `<p>From Server: ${event.data}</p>`;
+        };
+
+        // Event listener for when the connection is closed
+        socket.onclose = function(event) {
+            if (event.wasClean) {
+                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.log('[close] Connection died');
+            }
+        };
+
+        // Event listener for errors
+        socket.onerror = function(error) {
+            console.log(`[error]`);
+        };
+    </script>
+    <h2>ServerSide</h2>
+</body>
+</html>
